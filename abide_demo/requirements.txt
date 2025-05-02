@@ -1,0 +1,5 @@
+git+https://github.com/pykale/pykale.git@main
+nilearn
+isort
+black
+mypy
