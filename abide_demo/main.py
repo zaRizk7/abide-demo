@@ -2,6 +2,9 @@ import logging
 import os
 import sys
 
+import yaml
+import joblib
+import numpy as np
 import pandas as pd
 from nilearn.datasets import fetch_abide_pcp
 from sklearn.utils import check_random_state
@@ -24,6 +27,12 @@ if __name__ == "__main__":
             level=logging.INFO,
             format="[%(asctime)s] {%(filename)s:%(funcName)s:%(lineno)d} %(levelname)s - %(message)s",
         )
+        logging.info("Initializing training...")
+
+    # Export argparse arguments to yaml file
+    args_dict = vars(args)
+    with open(os.path.join(args.output_dir, "args.yaml"), "w") as f:
+        yaml.dump(args_dict, f)
 
     # Prepare dataset
     atlas = f"rois_{args.atlas}"
@@ -36,13 +45,15 @@ if __name__ == "__main__":
         verbose=args.verbose,
     )
 
-    # Process phenotypic data
+    # Process and export phenotypic data
     phenotypes = process_phenotypic_data(dataset.phenotypic, args.verbose)
+    phenotypes.to_csv(os.path.join(args.output_dir, "phenotypes.csv"))
 
     # Extract functional connectivity features, labels, and groups/sites
     x = extract_functional_connectivity(
         dataset.get(atlas), args.feature_extraction, args.verbose
     )
+
     y = phenotypes["DX_GROUP"].map({"CONTROL": 0, "ASD": 1}).to_numpy()
     groups = phenotypes["SITE_ID"].to_numpy()
 
@@ -55,6 +66,9 @@ if __name__ == "__main__":
     fit_args = {"x" if args.mida else "X": x, "y": y, "groups": groups}
     if args.mida:
         fit_args["factors"] = factors
+
+    # Export model inputs
+    np.savez_compressed(os.path.join(args.output_dir, "input.npz"), **fit_args)
 
     # Initialize random state
     random_state = check_random_state(args.random_state)
@@ -87,6 +101,8 @@ if __name__ == "__main__":
     pd.DataFrame(trainer.cv_results_).to_csv(
         os.path.join(args.output_dir, "cv_results.csv"), index=False
     )
+
+    joblib.dump(trainer, os.path.join(args.output_dir, "model.joblib"), 10)
 
     if args.verbose > 0:
         logging.info("Finished training.")

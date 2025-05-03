@@ -138,6 +138,7 @@ def extract_functional_connectivity(data, measures=["pearson"], verbose=0):
         logger = logging.getLogger("feature_extraction.extract_functional_connectivity")
         logger.setLevel(logging.INFO)
         logger.info("Extracting functional connectivity features...")
+        logger.info(f"Using measures: {measures}")
 
     for i, k in enumerate(reversed(measures), 1):
         k = AVAILABLE_FC_MEASURES.get(k)
