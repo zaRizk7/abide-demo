@@ -68,7 +68,7 @@ if __name__ == "__main__":
         fit_args["factors"] = factors
 
     # Export model inputs
-    np.savez_compressed(os.path.join(args.output_dir, "input.npz"), **fit_args)
+    np.savez_compressed(os.path.join(args.output_dir, "inputs.npz"), **fit_args)
 
     # Initialize random state
     random_state = check_random_state(args.random_state)
