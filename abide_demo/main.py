@@ -102,7 +102,7 @@ if __name__ == "__main__":
         os.path.join(args.output_dir, "cv_results.csv"), index=False
     )
 
-    joblib.dump(trainer, os.path.join(args.output_dir, "model.joblib"), 10)
+    joblib.dump(trainer, os.path.join(args.output_dir, "model.joblib"), 9)
 
     if args.verbose > 0:
         logging.info("Finished training.")
