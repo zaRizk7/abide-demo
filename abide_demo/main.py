@@ -2,13 +2,10 @@ import logging
 import os
 import sys
 
-import yaml
 import joblib
 import numpy as np
 import pandas as pd
-from nilearn.datasets import fetch_abide_pcp
-from sklearn.utils import check_random_state
-
+import yaml
 from modules import (
     create_splitter,
     create_trainer,
@@ -16,6 +13,8 @@ from modules import (
     parse_args,
     process_phenotypic_data,
 )
+from nilearn.datasets import fetch_abide_pcp
+from sklearn.utils import check_random_state
 
 if __name__ == "__main__":
     # Parse command line arguments
