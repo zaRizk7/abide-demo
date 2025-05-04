@@ -5,10 +5,10 @@ LABEL org.opencontainers.image.description="A simple container code to train an 
 
 RUN apt update && apt install build-essential -y
 
-COPY abide_demo .
+COPY abide_demo /abide_demo
 
 RUN pip install --upgrade pip
 
-RUN pip install -r requirements.txt
+RUN pip install -r /abide_demo/requirements.txt
 
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["python", "/abide_demo/main.py"]
