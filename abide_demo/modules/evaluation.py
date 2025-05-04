@@ -14,8 +14,8 @@ __all__ = ["create_splitter"]
 @validate_params(
     {
         "split": [StrOptions({"skf", "lpgo"})],
-        "n_splits": [Integral, None],
-        "n_repeats": [Integral, None],
+        "n_splits": [Interval(Integral, 1, None, closed="left"), None],
+        "n_repeats": [Interval(Integral, 1, None, closed="left"), None],
         "random_state": ["random_state"],
         "verbose": ["verbose"],
     },
