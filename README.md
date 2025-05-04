@@ -1,9 +1,9 @@
 Containerized Workflow for Multi-site Autism Classification on ABIDE
 ====================================================================
 
-This repository reproduces the study [1], which proposes a second-order functional connectivity measure called Tangent Pearson describing the ‘tangent correlation of correlation’ of brain region activity and explores the use of domain adaptation for integrating multi-site neuroimaging data including [ABIDE](https://doi.org/10.3389/fnhum.2013.00599).
+This repository reproduces the study [1], which proposes a second-order functional connectivity measure called Tangent Pearson describing the ‘tangent correlation of correlation’ of brain region activity and explores the use of domain adaptation for integrating multi-site neuroimaging data evaluated on the ABIDE [2] dataset for autism classification.
 
-It aims to simplify the original code from [1] using PyKale [2] and Nilearn [3], while also demonstrating the use of containers (e.g., Docker and Apptainer) to improve reproducibility and reusability of machine learning experiments.
+It aims to simplify the original code from [1] using PyKale [3] and Nilearn [4], while also demonstrating the use of containers (e.g., Docker and Apptainer) to improve reproducibility and reusability of machine learning experiments.
 
 # Instructions
 
@@ -94,6 +94,8 @@ Congratulations! We have sucessfully to train and evaluate an Autism classicatio
 
 [1] *Kunda, Mwiza, Shuo Zhou, Gaolang Gong, and Haiping Lu*. **Improving Multi-Site Autism Classification via Site-Dependence Minimization and Second-Order Functional Connectivity**. IEEE Transactions on Medical Imaging 42, no. 1 (January 2023): 55–65. https://doi.org/10.1109/TMI.2022.3203899.
 
-[2] *Lu, Haiping, Xianyuan Liu, Shuo Zhou, Robert Turner, Peizhen Bai, Raivo E. Koot, Mustafa Chasmai, Lawrence Schobs, and Hao Xu*. **PyKale**. In Proceedings of the 31st ACM International Conference on Information & Knowledge Management. New York, NY, USA: ACM, 2022. https://doi.org/10.1145/3511808.3557676.
+[2] *Nielsen, Jared A., Brandon A. Zielinski, P. Thomas Fletcher, Andrew L. Alexander, Nicholas Lange, Erin D. Bigler, Janet E. Lainhart, and Jeffrey S. Anderson*. **Multisite Functional Connectivity MRI Classification of Autism: ABIDE Results**. Frontiers in Human Neuroscience 7 (25 September 2013): 599. https://doi.org/10.3389/fnhum.2013.00599.
 
-[3] *Nilearn contributors, Ahmad Chamma, Aina Frau-Pascual, Alex Rothberg, Alexandre Abadie, Alexandre Abraham, Alexandre Gramfort, et al*. **Nilearn**. Zenodo, 2025. https://doi.org/10.5281/ZENODO.8397156.
+[3] *Lu, Haiping, Xianyuan Liu, Shuo Zhou, Robert Turner, Peizhen Bai, Raivo E. Koot, Mustafa Chasmai, Lawrence Schobs, and Hao Xu*. **PyKale**. In Proceedings of the 31st ACM International Conference on Information & Knowledge Management. New York, NY, USA: ACM, 2022. https://doi.org/10.1145/3511808.3557676.
+
+[4] *Nilearn contributors, Ahmad Chamma, Aina Frau-Pascual, Alex Rothberg, Alexandre Abadie, Alexandre Abraham, Alexandre Gramfort, et al*. **Nilearn**. Zenodo, 2025. https://doi.org/10.5281/ZENODO.8397156.
