@@ -66,9 +66,9 @@ While Docker is the most widely used containerization platform, high performance
    ```
    apptainer run --pwd / $IMAGE.sif -h
    ```
-    Unlike Docker's example, we have to set the container’s working directory to the root `/` using `--pwd /`. This is a workaround for a common issue when using containers pulled from Docker registries.
+    > Unlike Docker's example, we have to set the container’s working directory to the root `/` using `--pwd /`. This is a workaround for a common issue when using containers pulled from Docker registries.
     
-    By default, Apptainer sets the container’s working directory to the current host directory, which may not match the working directory defined in Docker-based images. To avoid unexpected behavior, it’s best to explicitly set the working directory to match the one originally defined by the container with `--pwd $ORIGINAL_WORKDIR` or use `/` if it isn't specified in the Docker image. See Apptainer issue #2573 for details.
+    > By default, Apptainer sets the container’s working directory to the current host directory, which may not match the working directory defined in Docker-based images. To avoid unexpected behavior, it’s best to explicitly set the working directory to match the one originally defined by the container with `--pwd $ORIGINAL_WORKDIR` or use `/` if it isn't specified in the Docker image. See Apptainer issue #2573 for details.
 
 3. To run deploy a container in a computing cluster in Apptainer is slightly different to Docker's with:
    ```
