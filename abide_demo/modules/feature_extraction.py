@@ -36,7 +36,7 @@ MAPPING = {
         np.nan: "LEFT",
     },
     "EYE_STATUS_AT_SCAN": {1: "OPEN", 2: "CLOSED"},
-    "DX_GROUP": {1: "CONTROL", 2: "ASD"},
+    "DX_GROUP": {1: "ASD", 2: "CONTROL"},
 }
 
 AVAILABLE_FC_MEASURES = {
@@ -55,8 +55,9 @@ AVAILABLE_FC_MEASURES = {
     },
     prefer_skip_nested_validation=False,
 )
-def process_phenotypic_data(data: pd.DataFrame, verbose=0):
-    """Process phenotypic data to impute missing values and and encode handedness.
+def process_phenotypic_data(data, verbose=0):
+    """Process phenotypic data to impute missing values and and encode categorical
+    variables including sex, handedness, eye status at scan, and diagnostic group.
 
     Parameters
     ----------
@@ -143,13 +144,10 @@ def extract_functional_connectivity(data, measures=["pearson"], verbose=0):
     for i, k in enumerate(reversed(measures), 1):
         k = AVAILABLE_FC_MEASURES.get(k)
 
-        # If it is the final transformation, vectorize and discard the diagonal
-        final = i == len(measures)
-
-        # We remove the diagonal given the pearson correlation will be equal to 1
-        # and it is redundant. Then we vectorize the matrix to a vector
-        # of shape (n_rois * (n_rois - 1) / 2, )
-        measure = ConnectivityMeasure(kind=k, vectorize=final, discard_diagonal=final)
+        # If it is the last transformation, vectorize and discard the diagonal
+        # of shape (n_rois * (n_rois - 1) / 2)
+        islast = i == len(measures)
+        measure = ConnectivityMeasure(kind=k, vectorize=islast, discard_diagonal=islast)
         data = measure.fit_transform(data)
 
     if verbose > 0:
