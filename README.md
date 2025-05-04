@@ -1,16 +1,15 @@
 Containerized Workflow for Multi-site Autism Classification on ABIDE
 ====================================================================
 
-This repository reproduces the study [1], which proposes a second-order functional connectivity measure called Tangent Pearson describing the ‘tangent correlation of correlation’ of brain region activity and explores the use of domain adaptation for integrating multi-site neuroimaging data.
+This repository reproduces the study [1], which proposes a second-order functional connectivity measure called Tangent Pearson describing the ‘tangent correlation of correlation’ of brain region activity and explores the use of domain adaptation for integrating multi-site neuroimaging data including [ABIDE](https://doi.org/10.3389/fnhum.2013.00599).
 
 It aims to simplify the original code from [1] using PyKale [2] and Nilearn [3], while also demonstrating the use of containers (e.g., Docker and Apptainer) to improve reproducibility and reusability of machine learning experiments.
 
-## Instructions
+# Instructions
 
 We assume that the user has has Docker/Apptainer already installed on their machine/computing cluster. For simplicity, we omitted the intructions on how to build the container image locally and focuses on how to pull an existing image from registries like [Docker Hub](https://hub.docker.com) or [GitHub Container Registry (GHCR)](https://ghcr.io).
 
-### Docker
----
+## Docker
 
 1. First, we need to pull the container image from the registry. In our case, the image is stored in GHCR and we can pull the image by using command:
    ```
@@ -49,10 +48,9 @@ We assume that the user has has Docker/Apptainer already installed on their mach
    - `model.joblib`: A trained model using the optimal hyperparameter settings identified during the tuning process.
    - `phenotypes.csv`: Preprocessed phenotypic information of the subjects used for domain adaptation.
 
-Congratulations! You have sucessfully to train and evaluate an Autism classication model with a Docker container.
+Congratulations! We have sucessfully to train and evaluate an Autism classication model with a Docker container.
 
-### Apptainer
----
+## Apptainer
 
 While Docker is the most widely used containerization platform, high performance computing (HPC) clusters in many cases won't have it installed for security purposes due to requiring root privileges to set up and deploy its containers. There are multiple alternatives to Docker that doesn't require root privileges like **Apptainer** or **Podman**. For this instruction, we will use Apptainer and assume that the users have logged in to their clusters and deployed a worker node in an interactive session (e.g., `srun`) to run the container. Like Docker's instruction, we omitted the instructions for building a container image locally.
 
@@ -62,20 +60,23 @@ While Docker is the most widely used containerization platform, high performance
    ```
     > `IMAGE` can also be a directory along with the specified filename.
 
+    Once the image has been pulled and built, we will find the image in a `*.sif` file format in the working/specified directory.
+
 2. Similarly to Docker, we can check the image's entrypoint available flag and argument, calling:
    ```
-   apptainer run --pwd / $IMAGE.sif -h
+   apptainer run $IMAGE.sif -h
    ```
-    > Unlike Docker's example, we have to set the container’s working directory to the root `/` using `--pwd /`. This is a workaround for a common issue when using containers pulled from Docker registries.
+    > By default, Apptainer sets the container’s working directory to the current directory on the host. However, this may not match the working directory defined in a Docker-based image, which typically defaults to the root directory `/`. If the Docker container’s entrypoint expects a specific working directory and uses relative paths, this mismatch can cause errors when running the image with Apptainer. This issue usually does not occur when the entrypoint uses absolute paths.
     
-    > By default, Apptainer sets the container’s working directory to the current host directory, which may not match the working directory defined in Docker-based images. To avoid unexpected behavior, it’s best to explicitly set the working directory to match the one originally defined by the container with `--pwd $ORIGINAL_WORKDIR` or use `/` if it isn't specified in the Docker image. See Apptainer issue #2573 for details.
+    > To avoid this, we should explicitly set the working directory in Apptainer using `--pwd $ORIGINAL_WORKDIR`, or use `--pwd /` if the original working directory isn’t specified (e.g. `apptainer run --pwd / $IMAGE.sif ...`).
+    
+    > See [Apptainer issue #2573](https://github.com/apptainer/apptainer/issues/2573) for details.
 
 3. To run deploy a container in a computing cluster in Apptainer is slightly different to Docker's with:
    ```
    apptainer run \
         -B $INPUT_SOURCE_DIRECTORY:$INPUT_MOUNT_DIRECTORY:ro \
         -B $OUTPUT_SOURCE_DIRECTORY:$OUTPUT_MOUNT_DIRECTORY \
-        --pwd / \
         $IMAGE.sif \
         --input-dir $INPUT_MOUNT_DIRECTORY \
         --output-dir $OUTPUT_MOUNT_DIRECTORY \
@@ -83,13 +84,13 @@ While Docker is the most widely used containerization platform, high performance
    ```
    Unlike Docker, which uses `-v` to mount directories, Apptainer uses `-B` (or `--bind`) to achieve the same functionality.
 
-   > On some clusters, certain directories may already be automatically mounted from the host operating system into the container environment. In such cases, you may not need to explicitly bind those directories using the `-B` flag.
+   > On some clusters, certain directories may already be pre-mounted from the host operating system into the container environment. In such cases, we may not need to explicitly mount those directories using the `-B` flag.
 
 4. The Apptainer container will run similarly as Docker's and is expected to produce the same output.
 
-Congratulations! You have sucessfully to train and evaluate an Autism classication model with an Apptainer container.
+Congratulations! We have sucessfully to train and evaluate an Autism classication model with an Apptainer container.
 
-## References
+# References
 
 [1] *Kunda, Mwiza, Shuo Zhou, Gaolang Gong, and Haiping Lu*. **Improving Multi-Site Autism Classification via Site-Dependence Minimization and Second-Order Functional Connectivity**. IEEE Transactions on Medical Imaging 42, no. 1 (January 2023): 55–65. https://doi.org/10.1109/TMI.2022.3203899.
 
