@@ -12,19 +12,19 @@ We assume that the user has has Docker/Apptainer already installed on their mach
 ## Docker
 
 1. First, we need to pull the container image from the registry. In our case, the image is stored in GHCR and we can pull the image by using command:
-   ```
+   ```sh
    docker pull ghcr.io/zarizk7/abide-demo:master
    ```
    > Optionally, we may check if the image is already stored locally with `docker images` command. GHCR images may sometimes not appear on the list. A workaround to check is to use `docker inspect ghcr.io/zarizk7/abide-demo:master`
 
 2. Next, we need to ensure that the image is properly deployable. It uses a Python script as the entrypoint to execute the code within the container. We can first check the arguments available in the image with:
-   ```
+   ```sh
    docker run ghcr.io/zarizk7/abide-demo:master -h
    ```
    We can observe that there are various arguments available when running the container, with `--input-dir` and `--output-dir` being the "required" ones that must be specified.
 
 3. Finally, we can run the container by executing:
-   ```
+   ```sh
    docker run --rm \
         -v $INPUT_SOURCE_DIRECTORY:$INPUT_MOUNT_DIRECTORY:ro \
         -v $OUTPUT_SOURCE_DIRECTORY:$OUTPUT_MOUNT_DIRECTORY \
@@ -55,7 +55,7 @@ Congratulations! We have sucessfully to train and evaluate an Autism classicatio
 While Docker is the most widely used containerization platform, high performance computing (HPC) clusters in many cases won't have it installed for security purposes due to requiring root privileges to set up and deploy its containers. There are multiple alternatives to Docker that doesn't require root privileges like **Apptainer** or **Podman**. For this instruction, we will use Apptainer and assume that the users have logged in to their clusters and deployed a worker node in an interactive session (e.g., `srun`) to run the container. Like Docker's instruction, we omitted the instructions for building a container image locally.
 
 1. While Apptainer has a different file format for its images, we can conveniently pull the container image from registries like Docker Hub or GHCR with command:
-   ```
+   ```sh
    apptainer pull $IMAGE.sif docker://ghcr.io/zarizk7/abide-demo:master
    ```
     > `IMAGE` can also be a directory along with the specified filename.
@@ -63,7 +63,7 @@ While Docker is the most widely used containerization platform, high performance
     Once the image has been pulled and built, we will find the image in a `*.sif` file format in the working/specified directory.
 
 2. Similarly to Docker, we can check the image's entrypoint available flag and argument, calling:
-   ```
+   ```sh
    apptainer run $IMAGE.sif -h
    ```
     > By default, Apptainer sets the container’s working directory to the current directory on the host. However, this may not match the working directory defined in a Docker-based image, which typically defaults to the root directory `/`. If the Docker container’s entrypoint expects a specific working directory and uses relative paths, this mismatch can cause errors when running the image with Apptainer. This issue usually does not occur when the entrypoint uses absolute paths.
@@ -73,7 +73,7 @@ While Docker is the most widely used containerization platform, high performance
     > See [Apptainer issue #2573](https://github.com/apptainer/apptainer/issues/2573) for details.
 
 3. To run deploy a container in a computing cluster in Apptainer is slightly different to Docker's with:
-   ```
+   ```sh
    apptainer run \
         -B $INPUT_SOURCE_DIRECTORY:$INPUT_MOUNT_DIRECTORY:ro \
         -B $OUTPUT_SOURCE_DIRECTORY:$OUTPUT_MOUNT_DIRECTORY \
