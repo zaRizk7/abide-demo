@@ -36,12 +36,11 @@ CLASSIFIER_GRID = {
 MIDA_GRID = {
     "num_components": [32, 64, 128, 256, None],
     "kernel": ["linear", "rbf"],
-    "mu": REG_COEF,
-    "eta": REG_COEF,
+    "mu": 1 / (2 * REG_COEF),
+    "eta": 1 / (2 * REG_COEF),
     "ignore_y": [True, False],
     "augment": [True, False],
 }
-
 MIDA_GRID = {f"domain_adapter__{key}": value for key, value in MIDA_GRID.items()}
 
 
