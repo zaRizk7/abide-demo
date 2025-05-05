@@ -20,7 +20,7 @@ __all__ = ["create_trainer"]
 
 # Inverse regularization coefficients for the classifiers
 # For Ridge (alpha) and MIDA (mu and eta), we use 1 / (2C)
-C = np.logspace(start=-5, stop=15, num=20 + 1, base=2)
+C = np.logspace(start=-15, stop=15, num=30 + 1, base=2)
 
 CLASSIFIER = {
     "logistic": LogisticRegression(),
