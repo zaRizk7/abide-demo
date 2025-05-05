@@ -28,6 +28,9 @@ if __name__ == "__main__":
         )
         logging.info("Initializing training...")
 
+    # Create folder for output
+    os.makedirs(args.output_dir, exist_ok=True)
+
     # Export argparse arguments to yaml file
     args_dict = vars(args)
     with open(os.path.join(args.output_dir, "args.yaml"), "w") as f:
