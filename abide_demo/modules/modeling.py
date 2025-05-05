@@ -18,8 +18,9 @@ from sklearn.utils._param_validation import (
 
 __all__ = ["create_trainer"]
 
-# Regularization constants for classifiers and MIDA
-REG_COEF = np.logspace(start=-5, stop=15, num=20 + 1, base=2)
+# Inverse regularization coefficients for the classifiers
+# For Ridge (alpha) and MIDA (mu and eta), we use 1 / (2C)
+C = np.logspace(start=-5, stop=15, num=20 + 1, base=2)
 
 CLASSIFIER = {
     "logistic": LogisticRegression(),
@@ -28,16 +29,16 @@ CLASSIFIER = {
 }
 
 CLASSIFIER_GRID = {
-    "logistic": {"C": REG_COEF},
-    "svm": {"C": REG_COEF},
-    "ridge": {"alpha": 1 / (2 * REG_COEF)},
+    "logistic": {"C": C},
+    "svm": {"C": C},
+    "ridge": {"alpha": 1 / (2 * C)},
 }
 
 MIDA_GRID = {
     "num_components": [32, 64, 128, 256, None],
     "kernel": ["linear", "rbf"],
-    "mu": 1 / (2 * REG_COEF),
-    "eta": 1 / (2 * REG_COEF),
+    "mu": 1 / (2 * C),
+    "eta": 1 / (2 * C),
     "ignore_y": [True, False],
     "augment": [True, False],
 }
